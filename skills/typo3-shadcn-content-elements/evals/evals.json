@@ -1,0 +1,66 @@
+{
+  "skill_name": "typo3-shadcn-content-elements",
+  "skill_type": "capability",
+  "spec": "SKILL-SPEC.md",
+  "note": "Near typo3-content-blocks (defines the element; this styles it) and webconsulting-branding (the website design system, not element presets). Cases lead with the visual result.",
+  "evals": [
+    {
+      "id": "typo3-shadcn-content-elements-trigger-pos-01",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "Restyle our content elements with the card and badge presets from the registry.",
+      "expect_skill": "typo3-shadcn-content-elements",
+      "note": "The canonical restyle case."
+    },
+    {
+      "id": "typo3-shadcn-content-elements-trigger-pos-02",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "These elements have hardcoded hex colours everywhere. Move them to semantic tokens.",
+      "expect_skill": "typo3-shadcn-content-elements",
+      "note": "The no-hardcoded-style rule via its symptom."
+    },
+    {
+      "id": "typo3-shadcn-content-elements-trigger-pos-03",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "Add Tailwind v4 tokens and some seed data for the new hero element.",
+      "expect_skill": "typo3-shadcn-content-elements",
+      "note": "Tokens plus seed data."
+    },
+    {
+      "id": "typo3-shadcn-content-elements-trigger-pos-04",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "Our elements look nothing like the shadcn registry. Overhaul them.",
+      "expect_skill": "typo3-shadcn-content-elements",
+      "note": "Open-ended overhaul."
+    },
+    {
+      "id": "typo3-shadcn-content-elements-trigger-neg-01",
+      "kind": "trigger-negative",
+      "status": "proposed",
+      "prompt": "Define the fields and structure for a new content element.",
+      "expect_skill": "typo3-content-blocks",
+      "note": "Modelling, not styling."
+    },
+    {
+      "id": "typo3-shadcn-content-elements-trigger-neg-02",
+      "kind": "trigger-negative",
+      "status": "proposed",
+      "prompt": "Apply the webconsulting.at brand typography and teal palette to this page.",
+      "expect_skill": "webconsulting-branding",
+      "note": "Both are shadcn-adjacent; the brand system is a different target."
+    },
+    {
+      "id": "bounded-theme-overhaul",
+      "kind": "behaviour",
+      "status": "proposed",
+      "prompt": "Our shadcn content blocks look mostly correct now, but a tiny spacing difference remains after two identical repair attempts. Keep rechecking the entire website until it disappears.",
+      "assertions": [
+        "Stops repeated non-progress and identifies the unresolved cause instead of unbounded full-site reruns.",
+        "Uses targeted repair checks between the required initial and final inventory passes."
+      ]
+    }
+  ]
+}

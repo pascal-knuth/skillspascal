@@ -1,0 +1,71 @@
+{
+  "skill_name": "typo3-content-blocks",
+  "skill_type": "preference",
+  "spec": "SKILL-SPEC.md",
+  "note": "The two nearest siblings are typo3-shadcn-content-elements (styling the same elements, not modelling them) and typo3-datahandler (writing records, not defining their shape). Cases lead with modelling and config.yaml.",
+  "evals": [
+    {
+      "id": "typo3-content-blocks-trigger-pos-01",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "I need a teaser element with a headline, an image and a link. Set up the definition for it.",
+      "expect_skill": "typo3-content-blocks",
+      "note": "The canonical modelling case, phrased as a field list."
+    },
+    {
+      "id": "typo3-content-blocks-trigger-pos-02",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "Our old fluid_styled_content elements should become the new format. What is the migration path?",
+      "expect_skill": "typo3-content-blocks",
+      "note": "Migration from legacy elements."
+    },
+    {
+      "id": "typo3-content-blocks-trigger-pos-03",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "The backend preview for my custom element renders blank. What did I get wrong?",
+      "expect_skill": "typo3-content-blocks",
+      "note": "Debugging a definition via its symptom."
+    },
+    {
+      "id": "typo3-content-blocks-trigger-pos-04",
+      "kind": "trigger-positive",
+      "status": "proposed",
+      "prompt": "How do I model a repeatable group of child records inside a single element?",
+      "expect_skill": "typo3-content-blocks",
+      "note": "Collections / nested structure."
+    },
+    {
+      "id": "typo3-content-blocks-trigger-neg-01",
+      "kind": "trigger-negative",
+      "status": "proposed",
+      "prompt": "Restyle these elements with the shadcn card and badge presets and Tailwind tokens.",
+      "expect_skill": "typo3-shadcn-content-elements",
+      "note": "Styling existing elements is the sibling's job."
+    },
+    {
+      "id": "typo3-content-blocks-trigger-neg-02",
+      "kind": "trigger-negative",
+      "status": "proposed",
+      "prompt": "Write 500 news records into the database from a CSV import script.",
+      "expect_skill": "typo3-datahandler",
+      "note": "Creating records programmatically, not defining a type."
+    },
+    {
+      "id": "typo3-content-blocks-trigger-pos-05",
+      "kind": "behaviour",
+      "status": "proposed",
+      "prompt": "Our Mask-to-Content-Blocks conversion changed field names and existing records now look empty. Audit the generated model and migrate it safely.",
+      "expected_output": "Treats the conversion as an in-place data-contract migration, preserves existing CType/column/table/FAL identities unless a separate migration proves a rename, validates YAML scalar types and nullability, and moves list_type data before CType-only registration.",
+      "assertions": [
+        "Preserves existing persisted identities by default",
+        "Checks integer and boolean YAML values by type",
+        "Audits stored NULL values before schema tightening",
+        "Tests Link objects and local Frame layouts",
+        "Proves the list_type migration transaction and idempotent rerun before registration"
+      ],
+      "files": []
+    }
+  ]
+}

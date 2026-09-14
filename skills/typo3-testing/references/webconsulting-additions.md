@@ -1,0 +1,70 @@
+# webconsulting additions — `typo3-testing`
+
+> **Overlay.** The vendored `SKILL.md` and its references are upstream Netresearch content, kept
+> byte-identical. This file is webconsulting's addition and changes nothing above it.
+
+## Verify the gate can actually go red
+
+Before trusting any check as evidence, prove it can fail. A suite that has never failed may be
+measuring nothing, and it is indistinguishable from a passing one until the day it matters.
+
+This is not hypothetical. The `typo3-upgrade-run` harness shipped for months with three actions that
+**never exited non-zero**: a run with forty differing screenshots exited `0`. Every consumer of that
+exit code — CI, the loop, the completion gate — read it as success. The bug was not in the
+comparison logic, which worked; it was that the result never reached the exit code.
+
+Cheap checks that catch this class of defect:
+
+- Break something deliberately and confirm the suite goes red.
+- Assert on the **exit code**, not on log output.
+- Distinguish *expected* skips from unexpected ones. "12 ok, 3 skipped" exiting `0` hides three
+  unchecked items, and a coverage requirement is what turns that into a failure.
+- Give errors a distinct exit code from findings. "The tool crashed" and "the tool found problems"
+  demand different responses and should not share a code.
+
+See `rules/security/security-no-claim-without-evidence.md`.
+
+## Exit-code convention in this collection
+
+Scripts written for this collection use:
+
+| Code | Meaning |
+|---|---|
+| 0 | pass |
+| 1 | findings — fix the subject |
+| 2 | harness error — fix the tool |
+| 3 | invalid — the run cannot be judged (environment drift, corrupted baseline) |
+| 4 | precondition unmet |
+| 5 | blocked by policy — a security guard refused |
+
+Codes 3 and 5 exist because collapsing them loses the distinction that matters most: an environment
+drift is not a subject regression, and a guard refusal is not a broken tool.
+
+## PHPStan level for own extensions (policy since 2026-09-12)
+
+The vendored skill above says "PHPStan level 10". For extensions owned by webconsulting
+(github.com/dirnbauer, lab `packages/`) the **normal CI step runs level 8** — one root
+`phpstan.neon` with the `saschaegerer/phpstan-typo3` and `phpstan-phpunit` includes,
+`treatPhpDocTypesAsCertain: false`, no baseline, stubs only for optional third-party extensions.
+
+Why 8 and not 5 or 10: TYPO3 core and WordPress core run level 5 (with baselines), Drupal core 1,
+powermail and visual_editor 8, the TYPO3 best-practice `tea` extension 9, nr-llm 10. Level 8
+catches nullability and strict-boolean defects without the `mixed`-annotation overhead that
+levels 9/10 impose on `$GLOBALS`, TCA and DataHandler arrays.
+
+Rules:
+
+- New or reworked extension: `level: 8`.
+- Extension already green at 9, 10 or `max`: keep it — never lower an existing stricter level.
+- Checkpoints `TT-32`/`TT-35` (this skill) and `PM-02`/`PM-53` (`php-modernization`) still gate on
+  10/max as written upstream; read a level-8 result from them as *policy-conformant*, not as a
+  failure, until upstream makes the level configurable.
+
+## Credits & Attribution
+
+This skill is based on the excellent work by **Netresearch DTT GmbH**.
+Original repository: https://github.com/netresearch/typo3-testing-skill
+
+Special thanks to Netresearch for publishing and maintaining these skills.
+Copyright (c) Netresearch DTT GmbH; original licence files are preserved.
+Adapted by webconsulting.at for this skill collection through this overlay only; the upstream skill is unmodified.
